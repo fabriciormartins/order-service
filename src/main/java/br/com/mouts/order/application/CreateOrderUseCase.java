@@ -1,20 +1,19 @@
 package br.com.mouts.order.application;
 
 import br.com.mouts.order.UseCase;
-import br.com.mouts.order.domain.Order;
-import br.com.mouts.order.domain.OrderRepository;
+import br.com.mouts.order.domain.OrderCreateRequestEvent;
+import org.springframework.context.ApplicationEventPublisher;
 
 @UseCase
 public class CreateOrderUseCase {
 
-    private final OrderRepository orderRepository;
+	private final ApplicationEventPublisher eventPublisher;
 
-    public CreateOrderUseCase(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
+	public CreateOrderUseCase(ApplicationEventPublisher eventPublisher) {
+		this.eventPublisher = eventPublisher;
+	}
 
-    public void execute(OrderDTO input) {
-        Order order = new Order();
-        this.orderRepository.save(order.create(input.customerId(), input.getProducts()));
-    }
+	public void execute(OrderDTO input) {
+		this.eventPublisher.publishEvent(new OrderCreateRequestEvent(input.customerId(), input.getProducts()));
+	}
 }
