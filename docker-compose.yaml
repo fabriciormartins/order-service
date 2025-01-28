@@ -1,8 +1,10 @@
 services:
   mongodb:
     container_name: mongodb
+    restart: always
     image: mongo:7.0.16
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: orders
     ports: ['27017:27017']
