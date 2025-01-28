@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
@@ -21,34 +22,40 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 public class OrderCreateSimulation extends Simulation {
 
 	private static final ObjectMapper mapper = JsonMapper.builder().findAndAddModules().build();
+	private List<ProductDTO> products;
+	private String customerId;
+	private String json;
+	private HttpProtocolBuilder httpProtocol;
 
-	HttpProtocolBuilder httpProtocol = HttpDsl.http.baseUrl("http://localhost:8080")
-			.header("Accept", MediaType.APPLICATION_JSON_VALUE)
-			.header("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-
-	List<ProductDTO> products = IntStream.range(0, 1000)
-			.mapToObj(i -> new ProductDTO(UUID.randomUUID().toString(),
+	@Override
+	public void before() {
+		this.products = IntStream.range(0, 1000)
+				.mapToObj(i -> new ProductDTO(UUID.randomUUID().toString(),
 						"Nome Product %d".formatted(i),
 						"Descrição %d do produto".formatted(i), 10,
 						BigDecimal.TEN)).toList();
-	String customerId = UUID.randomUUID().toString();
-	ScenarioBuilder scenario = scenario("Create 25000 orders in six seconds")
+		this.customerId = UUID.randomUUID().toString();
+		Supplier<String> getJson = () -> {
+			try {
+				OrderDTO dto = new OrderDTO(customerId, products);
+				return mapper.writeValueAsString(dto);
+			} catch (Exception e) {
+				System.err.println(e);
+				return "{}";
+			}};
+		this.json = getJson.get();
+		this.httpProtocol = HttpDsl.http.baseUrl("http://localhost:8080")
+				.header("Accept", MediaType.APPLICATION_JSON_VALUE)
+				.header("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+	}
+
+	ScenarioBuilder scenario = scenario("Create orders from 50 to 2500 users in six seconds")
 			.exec(HttpDsl.http("POST /orders")
 					.post("/orders")
-					.body(StringBody(session -> {
-
-						try {
-
-							OrderDTO dto = new OrderDTO(customerId, products);
-							return mapper.writeValueAsString(dto);
-						} catch (Exception e) {
-							System.err.println(e);
-						}
-						return "{}";
-					})));
+					.body(StringBody(session -> this.json)));
 
 	{
 		setUp(scenario.injectOpen(
-				rampUsersPerSec(50).to(2500).during(Duration.ofSeconds(6)))).protocols(httpProtocol);
+				rampUsersPerSec(50).to(2500).during(Duration.ofSeconds(6)))).protocols(this.httpProtocol);
 	}
 }
