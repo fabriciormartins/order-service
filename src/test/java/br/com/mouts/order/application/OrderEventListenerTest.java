@@ -1,8 +1,10 @@
 package br.com.mouts.order.application;
 
-import br.com.mouts.order.domain.OrderCreateRequestEvent;
-import br.com.mouts.order.domain.OrderCreatedEvent;
-import br.com.mouts.order.domain.Product;
+import br.com.mouts.order.application.usecase.CalculateTotalOrderUseCase;
+import br.com.mouts.order.application.usecase.CreateOrderUseCase;
+import br.com.mouts.order.domain.event.OrderCreateRequestEvent;
+import br.com.mouts.order.domain.event.OrderCreatedEvent;
+import br.com.mouts.order.domain.model.Product;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;

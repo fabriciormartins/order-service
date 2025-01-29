@@ -1,7 +1,7 @@
-package br.com.mouts.order.application;
+package br.com.mouts.order.application.usecase;
 
-import br.com.mouts.order.UseCase;
-import br.com.mouts.order.domain.OrderCreateRequestEvent;
+import br.com.mouts.order.application.OrderDTO;
+import br.com.mouts.order.domain.event.OrderCreateRequestEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.UUID;

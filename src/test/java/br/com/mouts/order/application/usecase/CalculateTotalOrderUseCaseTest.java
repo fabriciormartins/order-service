@@ -1,9 +1,9 @@
-package br.com.mouts.order.application;
+package br.com.mouts.order.application.usecase;
 
-import br.com.mouts.order.domain.Order;
-import br.com.mouts.order.domain.OrderRepository;
-import br.com.mouts.order.domain.OrderStatus;
-import br.com.mouts.order.domain.Product;
+import br.com.mouts.order.domain.model.Order;
+import br.com.mouts.order.domain.repository.OrderRepository;
+import br.com.mouts.order.domain.model.OrderStatus;
+import br.com.mouts.order.domain.model.Product;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

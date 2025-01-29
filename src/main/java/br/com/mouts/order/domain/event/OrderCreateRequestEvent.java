@@ -1,4 +1,6 @@
-package br.com.mouts.order.domain;
+package br.com.mouts.order.domain.event;
+
+import br.com.mouts.order.domain.model.Product;
 
 import java.util.List;
 import java.util.UUID;

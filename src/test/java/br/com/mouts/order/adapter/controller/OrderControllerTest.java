@@ -1,7 +1,12 @@
-package br.com.mouts.order.application;
+package br.com.mouts.order.adapter.controller;
 
+import br.com.mouts.order.application.OrderDTO;
+import br.com.mouts.order.application.OrderResponseDTO;
+import br.com.mouts.order.application.ProductDTO;
+import br.com.mouts.order.application.usecase.SendOrderRequestEventUseCase;
 import br.com.mouts.order.application.exception.GlobalExceptionHandler;
-import br.com.mouts.order.domain.OrderStatus;
+import br.com.mouts.order.application.usecase.FindOrderByIdUseCase;
+import br.com.mouts.order.domain.model.OrderStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -38,7 +43,7 @@ class OrderControllerTest {
 
 	@BeforeAll
 	void setUp() {
-		this.objectMapper = new ObjectMapper();
+		this.objectMapper = new ObjectMapper().findAndRegisterModules();
 		this.sendOrderRequestEventUseCase = Mockito.mock(SendOrderRequestEventUseCase.class);
 		this.findOrderByIdUseCase = Mockito.mock(FindOrderByIdUseCase.class);
 		OrderController orderController = new OrderController(this.sendOrderRequestEventUseCase, this.findOrderByIdUseCase);

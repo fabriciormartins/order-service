@@ -1,4 +1,4 @@
-package br.com.mouts.order.domain;
+package br.com.mouts.order.domain.event;
 
 public record OrderCreatedEvent(String orderId) {
 }

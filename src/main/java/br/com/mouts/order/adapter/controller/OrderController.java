@@ -1,5 +1,9 @@
-package br.com.mouts.order.application;
+package br.com.mouts.order.adapter.controller;
 
+import br.com.mouts.order.application.OrderDTO;
+import br.com.mouts.order.application.OrderResponseDTO;
+import br.com.mouts.order.application.usecase.SendOrderRequestEventUseCase;
+import br.com.mouts.order.application.usecase.FindOrderByIdUseCase;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;

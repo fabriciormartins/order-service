@@ -1,11 +1,11 @@
 package br.com.mouts.order.application;
 
-import br.com.mouts.order.domain.*;
+import br.com.mouts.order.application.usecase.CalculateTotalOrderUseCase;
+import br.com.mouts.order.application.usecase.CreateOrderUseCase;
+import br.com.mouts.order.domain.event.OrderCreateRequestEvent;
+import br.com.mouts.order.domain.event.OrderCreatedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.CompletableFuture;
 
 @Component
 public class OrderEventListener {

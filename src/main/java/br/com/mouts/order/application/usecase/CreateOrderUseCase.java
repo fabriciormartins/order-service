@@ -1,9 +1,8 @@
-package br.com.mouts.order.application;
+package br.com.mouts.order.application.usecase;
 
-import br.com.mouts.order.UseCase;
-import br.com.mouts.order.domain.Order;
-import br.com.mouts.order.domain.OrderRepository;
-import br.com.mouts.order.domain.Product;
+import br.com.mouts.order.domain.model.Order;
+import br.com.mouts.order.domain.repository.OrderRepository;
+import br.com.mouts.order.domain.model.Product;
 
 import java.util.List;
 import java.util.UUID;

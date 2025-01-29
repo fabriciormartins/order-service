@@ -1,4 +1,4 @@
-package br.com.mouts.order;
+package br.com.mouts.order.application.usecase;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -12,6 +12,6 @@ import org.springframework.stereotype.Service;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Service
-public @interface UseCase {
+@interface UseCase {
 
 }

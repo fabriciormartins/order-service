@@ -1,8 +1,7 @@
-package br.com.mouts.order.application;
+package br.com.mouts.order.application.usecase;
 
-import br.com.mouts.order.UseCase;
-import br.com.mouts.order.domain.Order;
-import br.com.mouts.order.domain.OrderRepository;
+import br.com.mouts.order.domain.model.Order;
+import br.com.mouts.order.domain.repository.OrderRepository;
 
 import java.util.Objects;
 import java.util.Optional;

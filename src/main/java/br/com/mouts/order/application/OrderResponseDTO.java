@@ -1,6 +1,6 @@
 package br.com.mouts.order.application;
 
-import br.com.mouts.order.domain.OrderStatus;
+import br.com.mouts.order.domain.model.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.List;

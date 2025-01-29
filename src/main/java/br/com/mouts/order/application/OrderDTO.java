@@ -1,6 +1,6 @@
 package br.com.mouts.order.application;
 
-import br.com.mouts.order.domain.Product;
+import br.com.mouts.order.domain.model.Product;
 
 import java.util.List;
 

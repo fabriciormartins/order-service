@@ -1,5 +1,7 @@
-package br.com.mouts.order.domain;
+package br.com.mouts.order.domain.model;
 
+import br.com.mouts.order.domain.event.OrderAmmountCalculatedEvent;
+import br.com.mouts.order.domain.event.OrderCreatedEvent;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.mongodb.core.mapping.Document;
