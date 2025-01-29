@@ -1,6 +1,6 @@
 package br.com.mouts.order.domain.model;
 
-import br.com.mouts.order.domain.event.OrderAmmountCalculatedEvent;
+import br.com.mouts.order.domain.event.OrderTotalCalculatedEvent;
 import br.com.mouts.order.domain.event.OrderCreatedEvent;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.AbstractAggregateRoot;
@@ -78,6 +78,6 @@ public class Order extends AbstractAggregateRoot<Order> {
 						.map(product -> product.getPrice().multiply(BigDecimal.valueOf(product.getQuantity().longValue())))
 						.reduce(BigDecimal.ZERO, BigDecimal::add);
 		this.status = OrderStatus.WAITING_PAYMENT;
-		this.registerEvent(new OrderAmmountCalculatedEvent(this));
+		this.registerEvent(new OrderTotalCalculatedEvent(this));
 	}
 }

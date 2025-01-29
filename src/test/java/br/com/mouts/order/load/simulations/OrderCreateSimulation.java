@@ -25,7 +25,6 @@ public class OrderCreateSimulation extends Simulation {
 	private List<ProductDTO> products;
 	private String customerId;
 	private String json;
-	private HttpProtocolBuilder httpProtocol;
 
 	@Override
 	public void before() {
@@ -44,9 +43,6 @@ public class OrderCreateSimulation extends Simulation {
 				return "{}";
 			}};
 		this.json = getJson.get();
-		this.httpProtocol = HttpDsl.http.baseUrl("http://localhost:8080")
-				.header("Accept", MediaType.APPLICATION_JSON_VALUE)
-				.header("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 	}
 
 	ScenarioBuilder scenario = scenario("Create orders from 50 to 2500 users in six seconds")
@@ -55,7 +51,9 @@ public class OrderCreateSimulation extends Simulation {
 					.body(StringBody(session -> this.json)));
 
 	{
-		setUp(scenario.injectOpen(
-				rampUsersPerSec(50).to(2500).during(Duration.ofSeconds(6)))).protocols(this.httpProtocol);
+		HttpProtocolBuilder httpProtocol = HttpDsl.http.baseUrl("http://localhost:8080")
+				.header("Accept", MediaType.APPLICATION_JSON_VALUE)
+				.header("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+		setUp(scenario.injectOpen(rampUsersPerSec(50).to(2500).during(Duration.ofSeconds(6)))).protocols(httpProtocol);
 	}
 }
