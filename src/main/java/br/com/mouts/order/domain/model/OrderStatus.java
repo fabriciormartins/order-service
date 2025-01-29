@@ -1,4 +1,4 @@
-package br.com.mouts.order.domain;
+package br.com.mouts.order.domain.model;
 
 public enum OrderStatus {
 

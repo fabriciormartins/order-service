@@ -6,12 +6,12 @@ public class GenericError {
 
     private String message;
     private int code;
-    private Instant timestamp;
+    private Long timestamp;
 
     public GenericError(String message, int code) {
         this.message = message;
         this.code = code;
-        this.timestamp = Instant.now();
+        this.timestamp = Instant.now().toEpochMilli();
     }
 
     public String getMessage() {
@@ -22,7 +22,7 @@ public class GenericError {
         return code;
     }
 
-    public Instant getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 }
