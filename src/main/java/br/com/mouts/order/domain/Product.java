@@ -24,13 +24,13 @@ public class Product {
         Objects.requireNonNull(quantity, "Quantity cannot be null");
         Objects.requireNonNull(price, "Price cannot be null");
 
-        if (id.isEmpty() || id.isBlank()) {
+        if (id.isBlank()) {
             throw new IllegalArgumentException("Id cannot be empty or blank");
         }
-        if (name.isEmpty() || name.isBlank()) {
+        if (name.isBlank()) {
             throw new IllegalArgumentException("Name cannot be empty or blank");
         }
-        if (description.isEmpty() || description.isBlank()) {
+        if (description.isBlank()) {
             throw new IllegalArgumentException("Description cannot be empty or blank");
         }
         if (price.compareTo(BigDecimal.ZERO) < 0) {

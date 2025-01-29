@@ -1,19 +1,34 @@
 package br.com.mouts.order.application;
 
 import br.com.mouts.order.UseCase;
-import br.com.mouts.order.domain.OrderCreateRequestEvent;
-import org.springframework.context.ApplicationEventPublisher;
+import br.com.mouts.order.domain.Order;
+import br.com.mouts.order.domain.OrderRepository;
+import br.com.mouts.order.domain.Product;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @UseCase
 public class CreateOrderUseCase {
 
-	private final ApplicationEventPublisher eventPublisher;
+	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CreateOrderUseCase.class);
 
-	public CreateOrderUseCase(ApplicationEventPublisher eventPublisher) {
-		this.eventPublisher = eventPublisher;
+	private final OrderRepository orderRepository;
+
+	public CreateOrderUseCase(OrderRepository orderRepository){
+		this.orderRepository = orderRepository;
 	}
 
-	public void execute(OrderDTO input) {
-		this.eventPublisher.publishEvent(new OrderCreateRequestEvent(input.customerId(), input.getProducts()));
+	public void execute(UUID orderId, String customerId, List<Product> products) {
+		Order order = new Order(orderId, customerId, products);
+		CompletableFuture.runAsync(() -> this.orderRepository.save(order))
+				.whenCompleteAsync((v, throwable) -> {
+					if (throwable != null) {
+						log.error("Error saving order: {}", throwable.getMessage());
+						return;
+					}
+					log.info("Order created: {}", order.getId());
+				});
 	}
 }

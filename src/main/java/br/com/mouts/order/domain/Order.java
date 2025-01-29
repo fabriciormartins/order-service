@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Document("order")
 public class Order extends AbstractAggregateRoot<Order> {
@@ -18,7 +19,7 @@ public class Order extends AbstractAggregateRoot<Order> {
 
 	private List<Product> products;
 
-	private BigDecimal ammount;
+	private BigDecimal total;
 
 	private OrderStatus status;
 
@@ -34,8 +35,8 @@ public class Order extends AbstractAggregateRoot<Order> {
 		return products;
 	}
 
-	public BigDecimal getAmmount() {
-		return ammount;
+	public BigDecimal getTotal() {
+		return total;
 	}
 
 	public OrderStatus getStatus() {
@@ -50,7 +51,8 @@ public class Order extends AbstractAggregateRoot<Order> {
 	 * @param products
 	 * @return
 	 */
-	public Order(String customerId, List<Product> products) {
+	public Order(UUID orderId, String customerId, List<Product> products) {
+		Objects.requireNonNull(orderId, "Order ID cannot be null");
 		Objects.requireNonNull(products, "Products cannot be null");
 		Objects.requireNonNull(customerId, "Products cannot be null");
 		if (products.isEmpty()) {
@@ -61,17 +63,19 @@ public class Order extends AbstractAggregateRoot<Order> {
 			throw new IllegalArgumentException("Customer ID cannot be empty");
 		}
 
-		this.id = java.util.UUID.randomUUID().toString();
+		this.id = orderId.toString();
 		this.status = OrderStatus.CREATED;
 		this.products = products;
 		this.customerId = customerId;
-		this.ammount = BigDecimal.ZERO;
+		this.total = BigDecimal.ZERO;
 		registerEvent(new OrderCreatedEvent(this.id));
 	}
 
-	public void calculateAmmount() {
-		this.ammount = this.products.stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-		this.status  = OrderStatus.WAITING_PAYMENT;
+	public void calculateTotal() {
+		this.total = this.products.stream()
+						.map(product -> product.getPrice().multiply(BigDecimal.valueOf(product.getQuantity().longValue())))
+						.reduce(BigDecimal.ZERO, BigDecimal::add);
+		this.status = OrderStatus.WAITING_PAYMENT;
 		this.registerEvent(new OrderAmmountCalculatedEvent(this));
 	}
 }

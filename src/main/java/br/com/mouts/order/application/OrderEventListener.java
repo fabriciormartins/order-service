@@ -10,30 +10,22 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class OrderEventListener {
 
-	private final OrderRepository orderRepository;
+	private final CalculateTotalOrderUseCase calculateTotalOrderUseCase;
 
-	public OrderEventListener(OrderRepository orderRepository) {
-		this.orderRepository = orderRepository;
+	private final CreateOrderUseCase createOrderUseCase;
+
+	public OrderEventListener(CalculateTotalOrderUseCase calculateTotalOrderUseCase, CreateOrderUseCase createOrderUseCase) {
+		this.calculateTotalOrderUseCase = calculateTotalOrderUseCase;
+		this.createOrderUseCase = createOrderUseCase;
 	}
 
 	@EventListener(classes = OrderCreatedEvent.class)
 	public void handle(OrderCreatedEvent event) {
-		this.orderRepository.findById(event.orderId()).ifPresent(order -> {
-			order.calculateAmmount();
-			this.orderRepository.save(order);
-		});
+		this.calculateTotalOrderUseCase.execute(event.orderId());
 	}
 
 	@EventListener(classes = OrderCreateRequestEvent.class)
 	public void handle(OrderCreateRequestEvent event) {
-		Order order = new Order(event.customerId(), event.products());
-		CompletableFuture.runAsync(() -> this.orderRepository.save(order))
-				.whenCompleteAsync((v, throwable) -> {
-					if (throwable != null) {
-						System.out.println("Error saving order: " + throwable.getMessage());
-						return;
-					}
-					System.out.println("Order created: " + order.getId());
-				});
+		this.createOrderUseCase.execute(event.orderId(), event.customerId(), event.products());
 	}
 }
