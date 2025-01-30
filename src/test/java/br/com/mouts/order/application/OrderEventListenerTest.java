@@ -2,6 +2,7 @@ package br.com.mouts.order.application;
 
 import br.com.mouts.order.application.usecase.CalculateTotalOrderUseCase;
 import br.com.mouts.order.application.usecase.CreateOrderUseCase;
+import br.com.mouts.order.application.usecase.SendOrderCheckoutUseCase;
 import br.com.mouts.order.domain.event.OrderCreateRequestEvent;
 import br.com.mouts.order.domain.event.OrderCreatedEvent;
 import br.com.mouts.order.domain.model.Product;
@@ -19,8 +20,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(classes = {  Config.class, ApplicationEventPublisher.class, OrderEventListener.class })
@@ -46,7 +46,7 @@ class OrderEventListenerTest {
 		var event = new OrderCreateRequestEvent(orderId, customerId, products);
 		this.publisher.publishEvent(event);
 
-		verify(this.createOrderUseCase).execute(orderId, customerId, products);
+		verify(this.createOrderUseCase, timeout(2000)).execute(orderId, customerId, products);
 	}
 	@Test
 	void handleOrderCreatedEvent() {
@@ -54,7 +54,7 @@ class OrderEventListenerTest {
 		var event = new OrderCreatedEvent(orderId);
 		this.publisher.publishEvent(event);
 
-		verify(this.calculateTotalOrderUseCase).execute(orderId);
+		verify(this.calculateTotalOrderUseCase, timeout(2000)).execute(orderId);
 	}
 
 }
@@ -70,6 +70,11 @@ class Config {
 	@Bean
 	CreateOrderUseCase createOrderUseCase() {
 		return mock(CreateOrderUseCase.class);
+	}
+
+	@Bean
+	SendOrderCheckoutUseCase sendOrderCheckoutUseCase() {
+		return mock(SendOrderCheckoutUseCase.class);
 	}
 
 }

@@ -41,5 +41,12 @@ e poderá ser executado apenas com a aplicação em execução utilizando o coma
 mvn gatling:test
 ```
 
+## Arquitetura
+A arquitetura desenvolvida foi a mais simples possível. 
+Segue abaixo o desenho onde esta aplicação está sendo identificada como _"Service C"_.
+
+<img src="./docs/01 - arch.png">
+
+
 ---
 ⌨️ com ❤️ por [Fabrício Rocha](https://github.com/fabriciormartins/) 😊
